@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  train:
+    build: .
+    container_name: train_model
+    command: python train_model.py
+    volumes:
+      - .:/app
+    restart: "no"
+
+  predict:
+    build: .
+    container_name: predict_model
+    command: python predict.py
+    volumes:
+      - .:/app
+    restart: "no"
+
+  drift_monitor:
+    build: .
+    container_name: drift_monitor
+    command: python drift_monitor.py
+    volumes:
+      - .:/app
+    restart: "no"
