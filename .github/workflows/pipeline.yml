@@ -48,9 +48,9 @@ jobs:
 
     - name: Build Docker images
       run: |
-        docker build -t train_model -f Dockerfile.train .
-        docker build -t predict_model -f Dockerfile.predict .
-        docker build -t drift_monitor -f Dockerfile.drift .
+        docker build -t train_model -f Dockerfile .
+        docker build -t predict_model -f Dockerfile .
+        docker build -t drift_monitor -f Dockerfile .
 
     # Optional: push images to Docker Hub (requires secrets)
     #- name: Log in to Docker Hub
