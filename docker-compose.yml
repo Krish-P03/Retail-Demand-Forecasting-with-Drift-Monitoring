@@ -3,7 +3,6 @@ version: '3.8'
 services:
   train:
     build: .
-    container_name: train_model
     command: python train_model.py
     volumes:
       - .:/app
@@ -11,7 +10,6 @@ services:
 
   predict:
     build: .
-    container_name: predict_model
     command: python predict.py
     volumes:
       - .:/app
@@ -19,8 +17,16 @@ services:
 
   drift_monitor:
     build: .
-    container_name: drift_monitor
     command: python drift_monitor.py
     volumes:
       - .:/app
     restart: "no"
+
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - train
+      - predict
+      - drift_monitor

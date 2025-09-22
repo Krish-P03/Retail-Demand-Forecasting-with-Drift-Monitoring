@@ -51,6 +51,7 @@ jobs:
         docker build -t train_model -f Dockerfile .
         docker build -t predict_model -f Dockerfile .
         docker build -t drift_monitor -f Dockerfile .
+        docker build -t api_model -f Dockerfile .
 
     # Optional: push images to Docker Hub (requires secrets)
     #- name: Log in to Docker Hub
