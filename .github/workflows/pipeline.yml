@@ -60,6 +60,7 @@ jobs:
 
     - name: Save SSH key
       run: |
+        mkdir -p ~/.ssh
         echo "${{ secrets.AWS_SSH_KEY }}" > ~/.ssh/aws_key.pem
         chmod 600 ~/.ssh/aws_key.pem
 
