@@ -27,16 +27,13 @@ jobs:
         pip install -r requirements.txt
 
     - name: Train model
-      run: |
-        python train_model.py
+      run: python train_model.py
 
     - name: Predict
-      run: |
-        python predict.py
+      run: python predict.py
 
     - name: Drift monitoring
-      run: |
-        python drift_monitor.py
+      run: python drift_monitor.py
 
   docker-build:
     runs-on: ubuntu-latest
@@ -61,16 +58,16 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Set up SSH
-      uses: actions/ssh-agent@v0.8.1
-      with:
-        ssh-private-key: ${{ secrets.AWS_SSH_KEY }}
+    - name: Save SSH key
+      run: |
+        echo "${{ secrets.AWS_SSH_KEY }}" > ~/.ssh/aws_key.pem
+        chmod 600 ~/.ssh/aws_key.pem
 
     - name: Copy code to EC2
       run: |
-        rsync -avz -e "ssh -o StrictHostKeyChecking=no" ./ ubuntu@3.111.40.210:/home/ubuntu/Retail-Demand-Forecasting-with-Drift-Monitoring
+        rsync -avz -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/aws_key.pem" ./ ubuntu@3.111.40.210:/home/ubuntu/Retail-Demand-Forecasting-with-Drift-Monitoring
 
     - name: Deploy Docker on EC2
       run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@3.111.40.210 \
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/aws_key.pem ubuntu@3.111.40.210 \
         "cd Retail-Demand-Forecasting-with-Drift-Monitoring && docker-compose down && docker-compose up --build -d"
